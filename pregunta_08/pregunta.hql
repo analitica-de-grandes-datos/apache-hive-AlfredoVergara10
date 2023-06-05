@@ -47,3 +47,15 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+
+-- Escribir el resultado de la consulta en el directorio 'output' delimitado por comas.
+INSERT OVERWRITE LOCAL DIRECTORY 'output/'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY ':'
+
+-- Consulta HQL.
+SELECT c2, sum(c6_val)
+FROM tbl0
+LATERAL VIEW explode(map_values(c6)) tbl AS c6_val
+GROUP BY c2
+ORDER BY c2;

@@ -44,3 +44,13 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
+
+-- Escribir el resultado de la consulta en el directorio 'output' delimitado por comas.
+INSERT OVERWRITE LOCAL DIRECTORY 'output/'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+
+-- Consulta HQL.
+SELECT DISTINCT tbl.c5_exp
+FROM tbl0
+LATERAL VIEW explode(c5) tbl AS c5_exp
+ORDER BY c5_exp;

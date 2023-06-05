@@ -30,3 +30,13 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+-- Escribir el resultado de la consulta en el directorio 'output' delimitado por comas.
+INSERT OVERWRITE LOCAL DIRECTORY 'output/'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY ':'
+
+-- Consulta HQL.
+SELECT c3_keys, count(c3_keys)
+FROM t0
+LATERAL VIEW explode(map_keys(c3)) tbl AS c3_keys
+GROUP BY c3_keys;

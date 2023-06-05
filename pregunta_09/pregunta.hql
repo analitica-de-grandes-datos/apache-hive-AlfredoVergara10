@@ -46,3 +46,18 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+-- Escribir el resultado de la consulta en el directorio 'output' delimitado por comas.
+INSERT OVERWRITE LOCAL DIRECTORY 'output/'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY ':'
+
+-- Consulta HQL.
+SELECT tbl0.c1, tbl0.c2, tbl.c4_val
+FROM (
+    SELECT c1, c4_key, c4_val
+    FROM tbl1
+    LATERAL VIEW explode(c4) tbl AS c4_key, c4_val
+) AS tbl
+FULL JOIN tbl0 ON tbl.c1 = tbl0.c1
+WHERE tbl.c4_key = tbl0.c2
+ORDER BY tbl0.c1;
